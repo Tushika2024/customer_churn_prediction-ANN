@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler,OneHotEncoder,LabelEncoder
 import pickle
+import os
 
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Churn Predictor", page_icon="📊", layout="wide")
@@ -20,14 +21,21 @@ st.markdown("""
 # --- LOAD ASSETS ---
 @st.cache_resource
 def load_assets():
+    # Get the directory where main.py is located
+    current_dir = os.path.dirname(__file__)
+    # Construct paths that work on both Windows and Linux
+    model_path = os.path.join(current_dir, 'model.h5')
+    le_path = os.path.join(current_dir, 'label_encoder_gender.pkl')
+    ohe_path = os.path.join(current_dir, 'one_hot_enocder_geo.pkl')
+    sc_path = os.path.join(current_dir, 'scaler.pkl')
     ##load the trained model
-    model=tf.keras.models.load_model('notebook\model.h5')
+    model=tf.keras.models.load_model(model_path)
     ##loading encoder and scalar
-    with open(r'D:\all-ml-projects\ann-project\notebook\label_encoder_gender.pkl','rb') as file:
+    with open(le_path,'rb') as file:
         label_encoder=pickle.load(file)
-    with open(r'D:\all-ml-projects\ann-project\notebook\one_hot_enocder_geo.pkl','rb') as file:
+    with open(ohe_path,'rb') as file:
         one_hot_encoder=pickle.load(file)
-    with open(r'D:\all-ml-projects\ann-project\notebook\scaler.pkl','rb') as file:
+    with open(sc_path,'rb') as file:
         scaler=pickle.load(file)
     return model,label_encoder,one_hot_encoder,scaler
 
